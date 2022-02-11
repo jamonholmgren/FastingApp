@@ -41,6 +41,7 @@
     "expo-localization": "11.0.0",
     "expo-modules-core": "^0.4.9",
     "expo-status-bar": "~1.1.0",
+    "graphql": "^16.3.0",
     "i18n-js": "3.8.0",
     "mobx": "6.1.8",
     "mobx-react-lite": "3.2.0",
@@ -54,6 +55,7 @@
     "reactotron-mst": "3.1.4",
     "reactotron-react-js": "^3.3.7",
     "reactotron-react-native": "5.0.1",
+    "urql": "^2.1.2",
     "validate.js": "0.13.1"
   },
   "devDependencies": {

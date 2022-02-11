@@ -42,6 +42,22 @@ const FLAT_LIST: ViewStyle = {
   paddingHorizontal: spacing[4],
 }
 
+import { useQuery } from "urql"
+
+const ourQuery = `
+  query MyQuery {
+    user(where: {id: {_eq: "1c946af5-e242-4dc8-ba46-500c2fffbf35"}}) {
+      id
+      name
+      fasts {
+        id
+        start_time
+        end_time
+      }
+    }
+  }
+`
+
 export const DemoListScreen: FC<StackScreenProps<NavigatorParamList, "demoList">> = observer(
   ({ navigation }) => {
     const goBack = () => navigation.goBack()
@@ -49,13 +65,15 @@ export const DemoListScreen: FC<StackScreenProps<NavigatorParamList, "demoList">
     const { characterStore } = useStores()
     const { characters } = characterStore
 
-    useEffect(() => {
-      async function fetchData() {
-        await characterStore.getCharacters()
-      }
+    const [result, reexecuteQuery] = useQuery({
+      query: ourQuery,
+    })
 
-      fetchData()
-    }, [])
+    if (result.fetching) return null
+
+    const user = result.data.user[0]
+
+    console.tron.logImportant(user)
 
     return (
       <View testID="DemoListScreen" style={FULL}>
@@ -70,13 +88,12 @@ export const DemoListScreen: FC<StackScreenProps<NavigatorParamList, "demoList">
           />
           <FlatList
             contentContainerStyle={FLAT_LIST}
-            data={[...characters]}
+            data={[...user.fasts]}
             keyExtractor={(item) => String(item.id)}
             renderItem={({ item }) => (
               <View style={LIST_CONTAINER}>
-                <Image source={{ uri: item.image }} style={IMAGE} />
                 <Text style={LIST_TEXT}>
-                  {item.name} ({item.status})
+                  {item.start_time} - {item.end_time}
                 </Text>
               </View>
             )}
